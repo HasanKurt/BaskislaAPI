@@ -17,6 +17,7 @@ using NLog;
 
 namespace BaskislaAPI
 {
+
     public class Startup
     {
 
