@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -11,8 +12,10 @@ namespace Entities.Models
         [Column("id")]
         public int id { get; set; }
         [Column("first_name")]
+        [StringLength(60, ErrorMessage = "First Name can't be longer than 60 characters")]
         public string FirstName { get; set; }
         [Column("last_name")]
+        [StringLength(60, ErrorMessage = "Last Name can't be longer than 60 characters")]
         public string LastName { get; set; }
     }
 }

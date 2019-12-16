@@ -21,5 +21,12 @@ namespace Repository
                 .OrderBy(ow => ow.id)
                 .ToList();
         }
+
+        public Person GetPersonById(int personId)
+        {
+            return FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
+        }
+
+        
     }
 }

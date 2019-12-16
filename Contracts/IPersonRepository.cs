@@ -8,5 +8,6 @@ namespace Contracts
     public interface IPersonRepository : IRepositoryBase<Person>
     {
         IEnumerable<Person> GetAllPersons();
+        Person GetPersonById(int personId);
     }
 }
