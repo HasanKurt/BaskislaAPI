@@ -17,14 +17,31 @@ namespace Repository
 
         public IEnumerable<Person> GetAllPersons()
         {
-            return FindAll()
-                .OrderBy(ow => ow.id)
-                .ToList();
+            return (from p in RepositoryContext.Persons orderby p.id select p).ToList();
+            //return  FindAll()
+            //    .OrderBy(ow => ow.id)
+            //    .ToList();
         }
 
         public Person GetPersonById(int personId)
         {
-            return FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
+            return (from p in RepositoryContext.Persons where p.id == personId select p)
+                .FirstOrDefault();//FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
+        }
+
+        public string GetWifeOfMale(int maleId)
+        {
+            int? wifeId = (from m in RepositoryContext.Marriages where m.male == maleId select m.female).Cast<int?>().FirstOrDefault();
+            if(wifeId.HasValue)
+            {
+                return (from p in RepositoryContext.Persons where p.id == wifeId select p.FirstName).FirstOrDefault();
+            }
+            return null;
+        }
+
+        public IEnumerable<Person> GetAllChildren(int parent)
+        {
+            return (from p in RepositoryContext.Persons where p.father == parent || p.mother == parent select p).ToList();
         }
 
         

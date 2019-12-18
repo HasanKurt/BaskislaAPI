@@ -9,5 +9,10 @@ namespace Contracts
     {
         IEnumerable<Person> GetAllPersons();
         Person GetPersonById(int personId);
+
+        string GetWifeOfMale(int maleId);
+
+        IEnumerable<Person> GetAllChildren(int parent);
+
     }
 }

@@ -8,5 +8,8 @@ namespace Entities.DTOs
     {
         public int Id { get; set; }
         public string LastName { get; set; }
+        public string Father { get; set; }
+        public string Mother { get; set; }
+
     }
 }

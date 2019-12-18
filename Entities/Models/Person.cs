@@ -17,5 +17,8 @@ namespace Entities.Models
         [Column("last_name")]
         [StringLength(60, ErrorMessage = "Last Name can't be longer than 60 characters")]
         public string LastName { get; set; }
+        public int father{ get; set; }
+        public int mother{ get; set; }
+
     }
 }

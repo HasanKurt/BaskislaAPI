@@ -70,5 +70,53 @@ namespace BaskislaAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("{id}/wife")]
+        public IActionResult GetWifeOfMale(int id)
+        {
+            try
+            {
+                var stringWifeName = _repository.Person.GetWifeOfMale(id);
+
+                if (stringWifeName == null)
+                {
+                    _logger.LogError($"Person with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned person with name: {stringWifeName}");
+
+                    return Ok(stringWifeName);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetOwnerById action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("{id}/children")]
+        public IActionResult GetAllChildren(int id)
+        {
+            try
+            {
+                _logger.LogInfo($"Returned all persons from database.");
+
+                var children = _repository.Person.GetAllChildren(id);
+
+                var personsResult = _mapper.Map<IEnumerable<PersonDTO>>(children);
+
+                return Ok(personsResult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetAllPersons action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
     }
 }
