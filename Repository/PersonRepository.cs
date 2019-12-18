@@ -17,10 +17,10 @@ namespace Repository
 
         public IEnumerable<Person> GetAllPersons()
         {
-            return (from p in RepositoryContext.Persons orderby p.id select p).ToList();
-            //return  FindAll()
-            //    .OrderBy(ow => ow.id)
-            //    .ToList();
+            //return (from p in RepositoryContext.Persons orderby p.id select p).ToList();
+            return  FindAll()
+                .OrderBy(ow => ow.id)
+                .ToList();
         }
 
         public Person GetPersonById(int personId)
