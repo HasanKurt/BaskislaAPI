@@ -7,9 +7,10 @@ namespace Entities.DTOs
     public class PersonDTO
     {
         public int Id { get; set; }
+        //public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Father { get; set; }
-        public string Mother { get; set; }
+        //public int Father { get; set; }
+        //public int Mother { get; set; }
 
     }
 }

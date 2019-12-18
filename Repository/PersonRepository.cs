@@ -44,6 +44,9 @@ namespace Repository
             return (from p in RepositoryContext.Persons where p.father == parent || p.mother == parent select p).ToList();
         }
 
-        
+        public void CreatePerson(Person person)
+        {
+            Create(person);
+        }
     }
 }

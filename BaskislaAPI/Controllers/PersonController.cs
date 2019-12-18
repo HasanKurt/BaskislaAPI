@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.DTOs;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +45,7 @@ namespace BaskislaAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "PersonById")]
         public IActionResult GetPersonById(int id)
         {
             try
@@ -116,6 +117,43 @@ namespace BaskislaAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+
+
+
+        [HttpPost]
+        public IActionResult CreateOwner([FromBody]PersonForCreationDTO person)
+        {
+            try
+            {
+                if (person == null)
+                {
+                    _logger.LogError("Person object sent from client is null.");
+                    return BadRequest("person object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid person object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                var personEntity = _mapper.Map<Person>(person);
+
+                _repository.Person.CreatePerson(personEntity);
+                _repository.Save();
+
+                var createdPerson = _mapper.Map<PersonDTO>(personEntity);
+
+                return CreatedAtRoute("PersonById", new { id = createdPerson.Id }, createdPerson);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside CreatePerson action: {ex.Message}");
+                return StatusCode(500, "Internal server error during post");
+            }
+        }
+
 
 
     }

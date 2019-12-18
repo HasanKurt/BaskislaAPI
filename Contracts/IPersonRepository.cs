@@ -14,5 +14,7 @@ namespace Contracts
 
         IEnumerable<Person> GetAllChildren(int parent);
 
+        void CreatePerson(Person person);
+
     }
 }
