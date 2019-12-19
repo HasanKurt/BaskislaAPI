@@ -48,5 +48,15 @@ namespace Repository
         {
             Create(person);
         }
+
+        public void UpdatePerson(Person person)
+        {
+            Update(person);
+        }
+
+        public void DeletePerson(Person person)
+        {
+            Delete(person);
+        }
     }
 }

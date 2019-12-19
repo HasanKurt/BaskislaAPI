@@ -15,6 +15,9 @@ namespace Contracts
         IEnumerable<Person> GetAllChildren(int parent);
 
         void CreatePerson(Person person);
+        void UpdatePerson(Person person);
+        void DeletePerson(Person person);
+
 
     }
 }

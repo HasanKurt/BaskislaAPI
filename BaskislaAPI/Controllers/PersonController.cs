@@ -154,6 +154,68 @@ namespace BaskislaAPI.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdatePerson(int id, [FromBody] PersonForUpdateDto person)
+        {
+            try
+            {
+                if (person == null)
+                {
+                    _logger.LogError("Owner object sent from client is null.");
+                    return BadRequest("Owner object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid person object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                var personEntity = _repository.Person.GetPersonById(id);
+                if (personEntity == null)
+                {
+                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+
+                _mapper.Map(person, personEntity);
+
+                _repository.Person.UpdatePerson(personEntity);
+                _repository.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside Updateperson action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteOwner(int id)
+        {
+            try
+            {
+                var person = _repository.Person.GetPersonById(id);
+                if (person == null)
+                {
+                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+
+                _repository.Person.DeletePerson(person);
+                _repository.Save();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
 
     }
