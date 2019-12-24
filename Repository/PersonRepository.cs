@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -58,5 +59,25 @@ namespace Repository
         {
             Delete(person);
         }
+
+        //Task<IEnumerable<Person>> IPersonRepository.GetAllPersons()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //Task<Person> IPersonRepository.GetPersonById(int personId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //Task<string> IPersonRepository.GetWifeOfMale(int maleId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //Task<IEnumerable<Person>> IPersonRepository.GetAllChildren(int parent)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
