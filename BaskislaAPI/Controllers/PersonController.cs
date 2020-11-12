@@ -51,6 +51,10 @@ namespace BaskislaAPI.Controllers
             try
             {
                 var owner = _repository.Person.GetPersonById(id);
+                var spouseId = _repository.Person.GetSpouse(id);
+
+                //add spounse info to person
+                //todo?????? HOW to do
 
                 if (owner == null)
                 {
@@ -72,23 +76,51 @@ namespace BaskislaAPI.Controllers
             }
         }
 
-        [HttpGet("{id}/wife")]
-        public IActionResult GetWifeOfMale(int id)
+        [HttpGet("{id}/details")]
+        public IActionResult GetDetailsOfPerson(int id)
         {
             try
             {
-                var stringWifeName = _repository.Person.GetWifeOfMale(id);
+                var viewModel = _repository.Person.GetPersonDetailsById(id);
 
-                if (stringWifeName == null)
+                if (viewModel == null)
                 {
                     _logger.LogError($"Person with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned person with name: {stringWifeName}");
+                    _logger.LogInfo($"Returned person with name: {viewModel}");
+                    var ownerResult = _mapper.Map<PersonDetailsDTO>(viewModel);
 
-                    return Ok(stringWifeName);
+                    return Ok(ownerResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetOwnerById action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
+        [HttpGet("{id}/wife")]
+        public IActionResult GetWifeOfMale(int id)
+        {
+            try
+            {
+                var spouseId = _repository.Person.GetSpouse(id);
+
+                if (spouseId == 0)
+                {
+                    _logger.LogError($"Person with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned person with name: {spouseId}");
+
+                    return Ok(spouseId);
                 }
             }
             catch (Exception ex)

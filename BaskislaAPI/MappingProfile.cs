@@ -13,6 +13,8 @@ namespace BaskislaAPI
         public MappingProfile()
         {
             CreateMap<Person, PersonDTO>();
+            CreateMap<PersonDetailsViewModel, PersonDetailsDTO>();
+
             CreateMap<PersonForCreationDTO, Person>();
             CreateMap<PersonForUpdateDto, Person>();
 
