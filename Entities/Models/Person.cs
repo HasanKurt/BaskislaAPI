@@ -22,7 +22,7 @@ namespace Entities.Models
         [Column("mother")]
         public int? mother{ get; set; }
         [Column("is_living")]
-        public bool IsLiving { get; set; }
+        public bool? IsLiving { get; set; }
         [Column("gender")]
         public string Gender { get; set; }
 

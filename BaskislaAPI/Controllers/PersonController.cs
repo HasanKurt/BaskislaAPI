@@ -153,7 +153,8 @@ namespace BaskislaAPI.Controllers
 
 
 
-        [HttpPost]
+
+        //[HttpPost]
         public IActionResult CreateOwner([FromBody]PersonForCreationDTO person)
         {
             try
@@ -186,7 +187,7 @@ namespace BaskislaAPI.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        //[HttpPut("{id}")]
         public IActionResult UpdatePerson(int id, [FromBody] PersonForUpdateDto person)
         {
             try
@@ -224,7 +225,7 @@ namespace BaskislaAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        //[HttpDelete("{id}")]
         public IActionResult DeleteOwner(int id)
         {
             try

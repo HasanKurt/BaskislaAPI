@@ -41,6 +41,13 @@ namespace Repository
             if (person != null)
             {
                 model.Id = person.id;
+                model.Father = person.father;
+                model.Mother = person.mother;
+                model.FirstName = person.FirstName;
+                model.LastName = person.LastName;
+                model.IsLiving = person.IsLiving;
+                model.Gender = person.Gender;
+
                 model.Spouse = GetSpouse(personId);
                 var childPersons = GetAllChildren(personId);
                 var siblinfPersons = GetAllSiblings(personId);
@@ -81,7 +88,7 @@ namespace Repository
         {
             //for now, only look at father
             var fatherId = (from p in RepositoryContext.Persons where p.id == id select p.father).FirstOrDefault();
-            return (from p in RepositoryContext.Persons where (p.father == fatherId && p.id != id)  select p.id).ToList();
+            return (from p in RepositoryContext.Persons where (p.father != null && p.father == fatherId && p.id != id)  select p.id).ToList();
         }
 
         public void CreatePerson(Person person)

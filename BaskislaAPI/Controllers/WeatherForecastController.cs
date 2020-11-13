@@ -14,7 +14,7 @@ namespace BaskislaAPI.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "WARRMMM", "WARMM", "WARRRRRRM", "WARM", "WRM", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILoggerManager _logger;
