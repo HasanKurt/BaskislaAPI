@@ -10,11 +10,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
+using Repository;
+using Entities;
 
 namespace BaskislaAPI
 {
@@ -39,7 +42,8 @@ namespace BaskislaAPI
             services.ConfigureIISIntegration();
 
             services.ConfigureLoggerService();
-            services.ConfigureMySqlContext(Configuration);
+            //services.ConfigureMySqlContext(Configuration);
+            services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
