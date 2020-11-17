@@ -24,11 +24,13 @@ namespace BaskislaAPI
 
     public class Startup
     {
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -43,7 +45,12 @@ namespace BaskislaAPI
 
             services.ConfigureLoggerService();
             //services.ConfigureMySqlContext(Configuration);
-            services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            if(!_env.IsDevelopment())
+                services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            else
+                services.AddDbContext<RepositoryContext>(option => option.UseMySql(Environment.GetEnvironmentVariable("ConnectionString", EnvironmentVariableTarget.User)));
+
             services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
