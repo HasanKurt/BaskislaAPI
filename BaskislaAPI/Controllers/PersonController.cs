@@ -46,12 +46,13 @@ namespace BaskislaAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "PersonById")]
-        public IActionResult GetPersonById(int id)
+        //https://code-maze.com/async-generic-repository-pattern/. For now, only make this async
+        public async Task<IActionResult> GetPersonByIdAsync(int id)
         {
             try
             {
-                var owner = _repository.Person.GetPersonById(id);
-                var spouseId = _repository.Person.GetSpouse(id);
+                var owner = await _repository.Person.GetPersonByIdAsync(id);
+                //var spouseId = _repository.Person.GetSpouse(id);
 
                 //add spounse info to person
                 //todo?????? HOW to do

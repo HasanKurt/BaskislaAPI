@@ -10,6 +10,7 @@ namespace Contracts
     {
         IEnumerable<Person> GetAllPersons();
         Person GetPersonById (int personId);
+        Task<Person> GetPersonByIdAsync(int personId);
         PersonDetailsViewModel GetPersonDetailsById(int id);
         int GetSpouse(int id);
         IEnumerable<Person> GetAllChildren(int parent);

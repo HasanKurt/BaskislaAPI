@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,6 +105,12 @@ namespace Repository
         public void DeletePerson(Person person)
         {
             Delete(person);
+        }
+
+        public async Task<Person> GetPersonByIdAsync(int personId)
+        {
+            return await FindByCondition(person => person.id.Equals(personId)).FirstOrDefaultAsync();// (from p in RepositoryContext.Persons where p.id == personId select p)
+                //.FirstOrDefault();//FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
         }
 
         //Task<IEnumerable<Person>> IPersonRepository.GetAllPersons()
