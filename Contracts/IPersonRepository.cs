@@ -11,9 +11,9 @@ namespace Contracts
         IEnumerable<Person> GetAllPersons();
         Person GetPersonById (int personId);
         Task<Person> GetPersonByIdAsync(int personId);
-        PersonDetailsViewModel GetPersonDetailsById(int id);
-        int GetSpouse(int id);
-        IEnumerable<Person> GetAllChildren(int parent);
+        Task<PersonDetailsViewModel> GetPersonDetailsByIdAsync(int id);
+        Task<int> GetSpouseAsync(int id, bool inputIsMale);
+        Task<IEnumerable<Person>> GetAllChildrenAsync(int parent, bool inputIsMale);
 
         //Task<IEnumerable<Person>> GetAllPersons();
         //Task<Person> GetPersonById(int personId);

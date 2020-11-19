@@ -32,7 +32,7 @@ namespace Repository
                 .FirstOrDefault();//FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
         }
 
-        public PersonDetailsViewModel GetPersonDetailsById(int personId)
+        public async Task<PersonDetailsViewModel> GetPersonDetailsByIdAsync(int personId)
         {
             //todo: hacky(?) way to combine persons and marriages
             //todo: investigate join and Include 
@@ -49,47 +49,56 @@ namespace Repository
                 model.IsLiving = person.IsLiving;
                 model.Gender = person.Gender;
 
-                model.Spouse = GetSpouse(personId);
-                var childPersons = GetAllChildren(personId);
-                var siblinfPersons = GetAllSiblings(personId);
+                var spouse = await GetSpouseAsync(personId, person.Gender.StartsWith('M'));
+                var siblinfPersons = await GetAllPaternalSiblingsAsync(personId);
 
                 List<int> childIds = new List<int>();
+                var childPersons =  await GetAllChildrenAsync(personId, person.Gender.StartsWith('M'));
                 foreach (var child in childPersons)
                     childIds.Add(child.id);
                 model.Children = childIds;
                 model.Siblings = siblinfPersons;
+                model.Spouse =  spouse;
                 //todo: use Include method to join Person and Marriage tables!
             }
             return model;//FindByCondition(person => person.id.Equals(personId)).FirstOrDefault();
         }
 
-        public int GetSpouse(int id)
+        public async Task<int> GetSpouseAsync(int id, bool inputIsMale)
         {
-
-            int? wifeId = (from m in RepositoryContext.Marriages where m.male == id select m.female).Cast<int?>().FirstOrDefault();
-            int? husdbandId = (from m in RepositoryContext.Marriages where m.female == id select m.male).Cast<int?>().FirstOrDefault();
-            if (wifeId.HasValue)
+            if (inputIsMale)
             {
-                return wifeId.Value;//(from p in RepositoryContext.Persons where p.id == wifeId select p.FirstName).FirstOrDefault();
+                int? wifeId = await (from m in RepositoryContext.Marriages where m.male == id select m.female).Cast<int?>().FirstOrDefaultAsync();
+                if (wifeId.HasValue)
+                {
+                    return wifeId.Value;//(from p in RepositoryContext.Persons where p.id == wifeId select p.FirstName).FirstOrDefault();
+                }
             }
-            if (husdbandId.HasValue)
+            else
             {
-                return husdbandId.Value;//(from p in RepositoryContext.Persons where p.id == wifeId select p.FirstName).FirstOrDefault();
+                int? husdbandId = await (from m in RepositoryContext.Marriages where m.female == id select m.male).Cast<int?>().FirstOrDefaultAsync();
+                if (husdbandId.HasValue)
+                {
+                    return husdbandId.Value;//(from p in RepositoryContext.Persons where p.id == wifeId select p.FirstName).FirstOrDefault();
+                }
             }
 
             return 0;//todo: refactor this method, code duplication is there
         }
 
-        public IEnumerable<Person> GetAllChildren(int parent)
+        public async Task<IEnumerable<Person>> GetAllChildrenAsync(int parent, bool inputIsMale)
         {
-            return (from p in RepositoryContext.Persons where p.father == parent || p.mother == parent select p).ToList();
+            if(inputIsMale)
+                return await (from p in RepositoryContext.Persons where p.father == parent select p).ToListAsync();
+            else
+                return await (from p in RepositoryContext.Persons where p.mother == parent select p).ToListAsync();
         }
 
-        public IEnumerable<int> GetAllSiblings(int id)
+        public async Task<IEnumerable<int>> GetAllPaternalSiblingsAsync(int id)
         {
             //for now, only look at father
-            var fatherId = (from p in RepositoryContext.Persons where p.id == id select p.father).FirstOrDefault();
-            return (from p in RepositoryContext.Persons where (p.father != null && p.father == fatherId && p.id != id)  select p.id).ToList();
+            var fatherId = await (from p in RepositoryContext.Persons where p.id == id select p.father).FirstOrDefaultAsync();
+            return await (from p in RepositoryContext.Persons where (p.father != null && p.father == fatherId && p.id != id)  select p.id).ToListAsync();
         }
 
         public void CreatePerson(Person person)

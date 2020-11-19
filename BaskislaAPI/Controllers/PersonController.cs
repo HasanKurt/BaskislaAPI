@@ -78,11 +78,11 @@ namespace BaskislaAPI.Controllers
         }
 
         [HttpGet("{id}/details")]
-        public IActionResult GetDetailsOfPerson(int id)
+        public async Task<IActionResult> GetDetailsOfPerson(int id)
         {
             try
             {
-                var viewModel = _repository.Person.GetPersonDetailsById(id);
+                var viewModel = await _repository.Person.GetPersonDetailsByIdAsync(id);
 
                 if (viewModel == null)
                 {
@@ -91,7 +91,7 @@ namespace BaskislaAPI.Controllers
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned person with name: {viewModel}");
+                    _logger.LogInfo($"Returned persondetails with name: {viewModel.FirstName}");
                     var ownerResult = _mapper.Map<PersonDetailsDTO>(viewModel);
 
                     return Ok(ownerResult);
@@ -105,51 +105,27 @@ namespace BaskislaAPI.Controllers
         }
 
 
-        [HttpGet("{id}/wife")]
-        public IActionResult GetWifeOfMale(int id)
-        {
-            try
-            {
-                var spouseId = _repository.Person.GetSpouse(id);
+        
 
-                if (spouseId == 0)
-                {
-                    _logger.LogError($"Person with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-                else
-                {
-                    _logger.LogInfo($"Returned person with name: {spouseId}");
+        //[HttpGet("{id}/children")]
+        //public IActionResult GetAllChildren(int id)
+        //{
+        //    try
+        //    {
+        //        _logger.LogInfo($"Returned all persons from database.");
 
-                    return Ok(spouseId);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetOwnerById action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        //        var children = _repository.Person.GetAllChildren(id);
 
-        [HttpGet("{id}/children")]
-        public IActionResult GetAllChildren(int id)
-        {
-            try
-            {
-                _logger.LogInfo($"Returned all persons from database.");
+        //        var personsResult = _mapper.Map<IEnumerable<PersonDTO>>(children);
 
-                var children = _repository.Person.GetAllChildren(id);
-
-                var personsResult = _mapper.Map<IEnumerable<PersonDTO>>(children);
-
-                return Ok(personsResult);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetAllPersons action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        //        return Ok(personsResult);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Something went wrong inside GetAllPersons action: {ex.Message}");
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
 
 
 
