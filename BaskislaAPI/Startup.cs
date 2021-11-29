@@ -49,7 +49,7 @@ namespace BaskislaAPI
             if(!_env.IsDevelopment())
                 services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             else
-                services.AddDbContext<RepositoryContext>(option => option.UseMySql(Environment.GetEnvironmentVariable("ConnectionString", EnvironmentVariableTarget.User)));
+                services.AddDbContext<RepositoryContext>(option => option.UseSqlServer(Configuration.GetConnectionString("database")));
 
             services.ConfigureRepositoryWrapper();
 
