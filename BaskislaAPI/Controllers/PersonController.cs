@@ -132,99 +132,99 @@ namespace BaskislaAPI.Controllers
 
 
         //[HttpPost]
-        public IActionResult CreateOwner([FromBody]PersonForCreationDTO person)
-        {
-            try
-            {
-                if (person == null)
-                {
-                    _logger.LogError("Person object sent from client is null.");
-                    return BadRequest("person object is null");
-                }
+        //public IActionResult CreateOwner([FromBody]PersonForCreationDTO person)
+        //{
+        //    try
+        //    {
+        //        if (person == null)
+        //        {
+        //            _logger.LogError("Person object sent from client is null.");
+        //            return BadRequest("person object is null");
+        //        }
 
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogError("Invalid person object sent from client.");
-                    return BadRequest("Invalid model object");
-                }
+        //        if (!ModelState.IsValid)
+        //        {
+        //            _logger.LogError("Invalid person object sent from client.");
+        //            return BadRequest("Invalid model object");
+        //        }
 
-                var personEntity = _mapper.Map<Person>(person);
+        //        var personEntity = _mapper.Map<Person>(person);
 
-                _repository.Person.CreatePerson(personEntity);
-                _repository.Save();
+        //        _repository.Person.CreatePerson(personEntity);
+        //        _repository.Save();
 
-                var createdPerson = _mapper.Map<PersonDTO>(personEntity);
+        //        var createdPerson = _mapper.Map<PersonDTO>(personEntity);
 
-                return CreatedAtRoute("PersonById", new { id = createdPerson.Id }, createdPerson);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside CreatePerson action: {ex.Message}");
-                return StatusCode(500, "Internal server error during post");
-            }
-        }
+        //        return CreatedAtRoute("PersonById", new { id = createdPerson.Id }, createdPerson);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Something went wrong inside CreatePerson action: {ex.Message}");
+        //        return StatusCode(500, "Internal server error during post");
+        //    }
+        //}
 
-        //[HttpPut("{id}")]
-        public IActionResult UpdatePerson(int id, [FromBody] PersonForUpdateDto person)
-        {
-            try
-            {
-                if (person == null)
-                {
-                    _logger.LogError("Owner object sent from client is null.");
-                    return BadRequest("Owner object is null");
-                }
+        ////[HttpPut("{id}")]
+        //public IActionResult UpdatePerson(int id, [FromBody] PersonForUpdateDto person)
+        //{
+        //    try
+        //    {
+        //        if (person == null)
+        //        {
+        //            _logger.LogError("Owner object sent from client is null.");
+        //            return BadRequest("Owner object is null");
+        //        }
 
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogError("Invalid person object sent from client.");
-                    return BadRequest("Invalid model object");
-                }
+        //        if (!ModelState.IsValid)
+        //        {
+        //            _logger.LogError("Invalid person object sent from client.");
+        //            return BadRequest("Invalid model object");
+        //        }
 
-                var personEntity = _repository.Person.GetPersonById(id);
-                if (personEntity == null)
-                {
-                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
+        //        var personEntity = _repository.Person.GetPersonById(id);
+        //        if (personEntity == null)
+        //        {
+        //            _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+        //            return NotFound();
+        //        }
 
-                _mapper.Map(person, personEntity);
+        //        _mapper.Map(person, personEntity);
 
-                _repository.Person.UpdatePerson(personEntity);
-                _repository.Save();
+        //        _repository.Person.UpdatePerson(personEntity);
+        //        _repository.Save();
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside Updateperson action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Something went wrong inside Updateperson action: {ex.Message}");
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
 
-        //[HttpDelete("{id}")]
-        public IActionResult DeleteOwner(int id)
-        {
-            try
-            {
-                var person = _repository.Person.GetPersonById(id);
-                if (person == null)
-                {
-                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
+        ////[HttpDelete("{id}")]
+        //public IActionResult DeleteOwner(int id)
+        //{
+        //    try
+        //    {
+        //        var person = _repository.Person.GetPersonById(id);
+        //        if (person == null)
+        //        {
+        //            _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
+        //            return NotFound();
+        //        }
 
-                _repository.Person.DeletePerson(person);
-                _repository.Save();
+        //        _repository.Person.DeletePerson(person);
+        //        _repository.Save();
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Something went wrong inside DeleteOwner action: {ex.Message}");
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
 
 
 

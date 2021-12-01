@@ -18,6 +18,9 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using Repository;
 using Entities;
+using Microsoft.OpenApi.Models;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BaskislaAPI
 {
@@ -46,10 +49,19 @@ namespace BaskislaAPI
             services.ConfigureLoggerService();
             //services.ConfigureMySqlContext(Configuration);
 
-            if(!_env.IsDevelopment())
-                services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-            else
+            //if(!_env.IsDevelopment())
+            //    services.AddDbContext<RepositoryContext>(option => option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            //else
                 services.AddDbContext<RepositoryContext>(option => option.UseSqlServer(Configuration.GetConnectionString("database")));
+
+            //Add identity
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<RepositoryContext>();
+
+            services.AddSwaggerGen( c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "swagger for baskisla", Version = "v1" });
+            });
 
             services.ConfigureRepositoryWrapper();
 
@@ -64,15 +76,20 @@ namespace BaskislaAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCors("CorsPolicy");
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseCors("CorsPolicy");
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
+            });
 
             app.UseRouting();
 
