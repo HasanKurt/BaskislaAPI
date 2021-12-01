@@ -66,6 +66,7 @@ namespace BaskislaAPI
             services.ConfigureRepositoryWrapper();
 
             services.AddControllers();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +78,7 @@ namespace BaskislaAPI
             }
 
             //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             //app.UseCors("CorsPolicy");
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -98,6 +99,7 @@ namespace BaskislaAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
