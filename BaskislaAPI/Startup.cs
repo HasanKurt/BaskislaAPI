@@ -21,6 +21,8 @@ using Entities;
 using Microsoft.OpenApi.Models;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using BaskislaAPI.Factory;
+using EmailService;
 
 namespace BaskislaAPI
 {
@@ -55,8 +57,34 @@ namespace BaskislaAPI
                 services.AddDbContext<RepositoryContext>(option => option.UseSqlServer(Configuration.GetConnectionString("database")));
 
             //Add identity
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<RepositoryContext>();
+            services.AddIdentity<User, IdentityRole>( opt =>
+            {
+                opt.Password.RequiredLength = 7;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireUppercase = false;
+
+                opt.User.RequireUniqueEmail = true;
+                opt.SignIn.RequireConfirmedEmail = true;
+
+            })
+                .AddEntityFrameworkStores<RepositoryContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(2));
+
+
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
+
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
+
+
+
 
             services.AddSwaggerGen( c =>
             {
@@ -94,6 +122,7 @@ namespace BaskislaAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

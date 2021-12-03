@@ -11,6 +11,7 @@ using Entities;
 using Contracts;
 using AutoMapper;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BaskislaAPI.Controllers
 {
@@ -33,6 +34,7 @@ namespace BaskislaAPI.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Employees()
         {
             var persons = await _repository.Person.FindAll().ToListAsync();

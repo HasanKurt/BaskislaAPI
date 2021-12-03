@@ -17,6 +17,7 @@ namespace BaskislaAPI
 
             CreateMap<PersonForCreationDTO, Person>();
             CreateMap<PersonForUpdateDto, Person>();
+            CreateMap<UserRegistrationModel, User>().ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
 
         }
     }
